@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithmus Visualisierung</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Algorithmus Visualisierung</h1>
+            <p>Zählung von Elementaroperationen (EOP)</p>
+        </header>
+        
+        <div class="controls-card">
+            <div class="input-group">
+                <label for="array-input">Array (kommagetrennt):</label>
+                <input type="text" id="array-input" value="5, 3, 4, 1, 8, 2">
+            </div>
+            <div class="button-group">
+                <button id="btn-reset" class="btn secondary">Reset</button>
+                <button id="btn-step" class="btn primary">Schritt (Step)</button>
+                <button id="btn-play" class="btn success">Auto Play</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="left-column">
+                <div class="code-section card">
+                    <h2>Code</h2>
+                    <pre><code id="code-display">
+<span id="line-1">1 int contains_decreasing_pair_at_even_index(int arr[], int n)</span>
+<span id="line-2">2 {</span>
+<span id="line-3">3   int found = 0;</span>
+<span id="line-4">4   for (int i = 0; i &lt; n - 2; i += 2)</span>
+<span id="line-5">5   {</span>
+<span id="line-6">6       if (arr[i] &gt; arr[i + 2])</span>
+<span id="line-7">7           found = 1;</span>
+<span id="line-8">8       if (found)</span>
+<span id="line-9">9           break;</span>
+<span id="line-10">10  }</span>
+<span id="line-11">11  return found;</span>
+<span id="line-12">12 }</span>
+                    </code></pre>
+                </div>
+
+            <div class="visualization-section card">
+                <h2>Visualisierung</h2>
+                <div class="array-container" id="array-container">
+                    <!-- Array elements will be rendered here -->
+                </div>
+                <div class="variables">
+                    <div class="var-box"><span>n:</span> <strong id="var-n">-</strong></div>
+                    <div class="var-box"><span>i:</span> <strong id="var-i">-</strong></div>
+                    <div class="var-box"><span>found:</span> <strong id="var-found">-</strong></div>
+                </div>
+            </div>
+            </div>
+            
+            <div class="eop-section card">
+                <h2>Elementaroperationen (EOP)</h2>
+                <div class="eop-total">Gesamt: <span id="eop-count">0</span></div>
+                <ul class="eop-log" id="eop-log">
+                    <!-- Log entries -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
