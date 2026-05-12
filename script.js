@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnReset = document.getElementById('btn-reset');
     const btnStep = document.getElementById('btn-step');
     const btnPlay = document.getElementById('btn-play');
-    
+
     const arrayContainer = document.getElementById('array-container');
     const varN = document.getElementById('var-n');
     const varI = document.getElementById('var-i');
@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let found = 0;
     let eopTotal = 0;
     let cachedNMinus2 = false;
-    
+
     // Status-Maschine für die Visualisierung
-    let currentState = 'INIT'; 
+    let currentState = 'INIT';
     let playInterval = null;
 
     // Hilfsfunktion zum Auslesen und Verarbeiten der Array-Eingabe
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             eopTotal += cost;
             eopCountEl.textContent = eopTotal;
         }
-        
+
         const li = document.createElement('li');
         li.innerHTML = `<span>${message}</span> <span class="cost">+${cost} EOP</span>`;
         if (cost === 0) {
@@ -87,14 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
         eopTotal = 0;
         cachedNMinus2 = false;
         currentState = 'LINE_3';
-        
+
         eopCountEl.textContent = '0';
         eopLog.innerHTML = '';
-        
+
         renderArray();
         updateVars();
         highlightLine(3);
-        
+
         btnStep.disabled = false;
         if (playInterval) {
             clearInterval(playInterval);
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentState = 'LINE_4_INIT';
                 highlightLine(4);
                 break;
-                
+
             case 'LINE_4_INIT':
                 i = 0;
                 addLog("<code>int i = 0;</code> (1 Zuweisung)", 1);
@@ -131,9 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     addLog("Berechne und cache <code>n - 2</code> einmalig (1 Arithm.)", 1);
                     cachedNMinus2 = true;
                 }
-                
-                addLog(`Prüfe Bedingung <code>i < n - 2</code> (${i} < ${n-2}) (1 Vergleich)`, 1);
-                
+
+                addLog(`Prüfe Bedingung <code>i < n - 2</code> (${i} < ${n - 2}) (1 Vergleich)`, 1);
+
                 if (i < n - 2) {
                     currentState = 'LINE_6';
                     highlightLine(6);
@@ -148,9 +148,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             case 'LINE_6':
                 addLog(`Berechne <code>i + 2</code> (1 Arithm.)`, 1);
-                addLog(`Vergleiche <code>arr[${i}] > arr[${i+2}]</code> (${arr[i]} > ${arr[i+2]}) (1 Vergleich)`, 1);
+                addLog(`Vergleiche <code>arr[${i}] > arr[${i + 2}]</code> (${arr[i]} > ${arr[i + 2]}) (1 Vergleich)`, 1);
                 addLog(`<em>(Arrayzugriffe arr[i] kosten 0 EOP)</em>`, 0);
-                
+
                 if (arr[i] > arr[i + 2]) {
                     currentState = 'LINE_7';
                     highlightLine(7);
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Prüft, ob ein abnehmendes Paar gefunden wurde
                 addLog(`Prüfe <code>if (found)</code> (${found} != 0) (1 Vergleich)`, 1);
                 renderArray(); // Hervorhebung entfernen
-                
+
                 if (found) {
                     // Wenn ja, breche die Schleife ab
                     currentState = 'LINE_9';
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event-Listener für Buttons und Eingabefelder
     btnReset.addEventListener('click', reset);
     btnStep.addEventListener('click', step);
-    
+
     // Auto-Play Logik: Startet oder pausiert den automatischen Durchlauf
     btnPlay.addEventListener('click', () => {
         if (playInterval) {
