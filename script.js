@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const eopCountEl = document.getElementById('eop-count');
     const eopLog = document.getElementById('eop-log');
 
+    // Initialisierung der Variablen für den Algorithmus-Status
     let arr = [];
     let n = 0;
     let i = 0;
@@ -18,16 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let eopTotal = 0;
     let cachedNMinus2 = false;
     
-    // State machine
+    // Status-Maschine für die Visualisierung
     let currentState = 'INIT'; 
     let playInterval = null;
 
+    // Hilfsfunktion zum Auslesen und Verarbeiten der Array-Eingabe
     function parseArray() {
         const val = arrayInput.value;
         const parsed = val.split(',').map(x => parseInt(x.trim(), 10)).filter(x => !isNaN(x));
         return parsed.length > 0 ? parsed : [5, 3, 4, 1, 8, 2];
     }
 
+    // Visualisiert das Array und hebt aktuell verarbeitete Elemente hervor
     function renderArray(highlightIndex1 = -1, highlightIndex2 = -1) {
         arrayContainer.innerHTML = '';
         arr.forEach((val, idx) => {
@@ -41,12 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Aktualisiert die Anzeige der Variablen-Werte im UI
     function updateVars() {
         varN.textContent = n;
         varI.textContent = currentState === 'INIT' || currentState === 'LINE_3' ? '-' : i;
         varFound.textContent = currentState === 'INIT' ? '-' : found;
     }
 
+    // Fügt einen Eintrag zum EOP-Log hinzu und aktualisiert die Gesamtsumme
     function addLog(message, cost) {
         if (cost > 0) {
             eopTotal += cost;
@@ -64,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         eopLog.scrollTop = eopLog.scrollHeight;
     }
 
+    // Hebt die aktuell ausgeführte Codezeile hervor
     function highlightLine(lineNum) {
         document.querySelectorAll('pre span').forEach(el => el.classList.remove('active'));
         if (lineNum > 0) {
@@ -72,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Setzt den Algorithmus auf den Startzustand zurück
     function reset() {
         arr = parseArray();
         n = arr.length;
@@ -97,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Führt einen einzelnen Schritt im Algorithmus aus
     function step() {
         if (currentState === 'DONE') return;
 
@@ -118,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
 
             case 'LINE_4_COND':
+                // Prüft die Schleifenbedingung (i < n - 2)
                 if (!cachedNMinus2) {
                     addLog("Berechne und cache <code>n - 2</code> einmalig (1 Arithm.)", 1);
                     cachedNMinus2 = true;
@@ -130,9 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     highlightLine(6);
                     renderArray(i, i + 2);
                 } else {
+                    // Ende der Schleife erreicht
                     currentState = 'LINE_11';
                     highlightLine(11);
-                    renderArray(); // Remove highlight
+                    renderArray(); // Hebt keine Elemente mehr hervor
                 }
                 break;
 
@@ -159,13 +169,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
 
             case 'LINE_8':
+                // Prüft, ob ein abnehmendes Paar gefunden wurde
                 addLog(`Prüfe <code>if (found)</code> (${found} != 0) (1 Vergleich)`, 1);
-                renderArray(); // Remove highlight
+                renderArray(); // Hervorhebung entfernen
                 
                 if (found) {
+                    // Wenn ja, breche die Schleife ab
                     currentState = 'LINE_9';
                     highlightLine(9);
                 } else {
+                    // Wenn nein, gehe zum nächsten Inkrement-Schritt
                     currentState = 'LINE_4_INC';
                     highlightLine(4);
                 }
@@ -200,9 +213,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Event-Listener für Buttons und Eingabefelder
     btnReset.addEventListener('click', reset);
     btnStep.addEventListener('click', step);
     
+    // Auto-Play Logik: Startet oder pausiert den automatischen Durchlauf
     btnPlay.addEventListener('click', () => {
         if (playInterval) {
             clearInterval(playInterval);
@@ -217,11 +232,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Reagiert auf Änderungen in der Array-Eingabe
     arrayInput.addEventListener('change', reset);
     arrayInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') reset();
     });
 
-    // Initial setup
+    // Initialer Start des Algorithmus-Zustands
     reset();
 });
